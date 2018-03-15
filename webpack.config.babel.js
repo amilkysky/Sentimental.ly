@@ -8,7 +8,7 @@ const config = {
     },
     devtool: "source-map",
     module: { 
-    loaders: [
+    rules: [
         {
         test: /\.(js|jsx)$/, 
         include: path.join(__dirname, 'client/src'),
