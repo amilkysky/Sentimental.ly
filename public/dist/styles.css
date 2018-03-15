@@ -1,0 +1,15 @@
+body {
+
+}
+
+.graphContainer {
+	border: 1px;
+	float: left;
+  width: 75%;
+}
+
+.tweetsContainer {
+	border: 1px;
+	float: right;
+  width: 25%;
+}
