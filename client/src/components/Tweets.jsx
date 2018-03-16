@@ -1,38 +1,32 @@
-import React from 'react';
-import TweetEntry from './TweetEntry.jsx';
+import React from 'react'
+import TweetEntry from './TweetEntry.jsx'
 
 class Tweets extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
+  render () {
     let sentimentUrls = {
       poor: 'https://imgur.com/a/iNTMR',
       average: 'https://imgur.com/a/iNTMR',
       positive: 'https://imgur.com/a/iNTMR'
-    };
+    }
 
     return (
       <div className="tweetsContainer">
         <ul>
           {this.props.tweetsArray.map((tweet, i) => {
-            let img = sentimentUrls.average;
+            let img = sentimentUrls.average
             if (tweet.sentiment <= 3) {
-              img = sentimentUrls.poor;
+              img = sentimentUrls.poor
             } else if (tweet.sentiment >= 3 && tweet.sentiment <= 6) {
-              img = sentimentUrls.average;
+              img = sentimentUrls.average
             } else {
-              img = sentimentUrls.positive;
+              img = sentimentUrls.positive
             }
-            console.log('img chek', img);
-            return <li key={i}><TweetEntry tweetEntry={tweet} /></li>;
+            return <li key={i}><TweetEntry tweetEntry={tweet} /></li>
           })}
         </ul>
       </div>
-    );
+    )
   }
 }
 
-export default Tweets;
+export default Tweets

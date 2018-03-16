@@ -1,29 +1,30 @@
-const knex = require('knex')(require('../../knexfile'));
+const knex = require('knex')(require('../../knexfile'))
 
 exports.rollbackMigrate = (done) => {
   knex.migrate.rollback()
     .then(function () {
-      return knex.migrate.latest();
+      return knex.migrate.latest()
     })
     .then(function () {
-      return knex.seed.run();
+      return knex.seed.run()
     })
     .then(function () {
-      done();
+      done()
     })
     .catch(function (err) {
-      console.log('error in migration:', err);
-      done();
-    });
-};
+      console.log('error in migration:', err)
+      done()
+    })
+}
 
 exports.rollback = (done) => {
   knex.migrate.rollback()
     .then(function () {
-      done();
+      done()
     })
     .catch(function (err) {
-      console.log('err in migration afterEach');
-      done();
-    });
-};
+      throw err
+      // console.log('err in migration afterEach')
+      // done()
+    })
+}

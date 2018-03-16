@@ -1,17 +1,12 @@
-# Project Name
+# Sentimental.ly
 
-The project description
-A full-stack frontend thesis project that connects to Twitter's Streaming API. The application will have a frontend emphasis that includes data visualization of Twitter analytics, and will likely incorporate sentiment analysis.
+A full-stack business analytics application that connects to Twitter's Streaming API. The application will include Twitter sentiment data.
 
-## Project By
+## An Application By
 
 Daphne Dang
 
-Got out-of-the-box version of app up and running as of 1/29/2018
-
-## Roadmap
-
-View the project roadmap/App Plan here: https://docs.google.com/document/d/1v3kzYb9nLq2AxO9d3pD3nxP81AlfNDOE-2NJqb88KD8/edit?usp=sharing
+Initial app up and running as of 1/29/2018
 
 # Table of Contents
 

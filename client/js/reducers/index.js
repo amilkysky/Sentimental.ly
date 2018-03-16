@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux';
-import keywordSubscription from './keywordSubscription';
-import tweets from './tweets';
+import { combineReducers } from 'redux'
+import keywordSubscription from './keywordSubscription'
+import tweets from './tweets'
 
 export default combineReducers({
-	keywordSubscription: keywordSubscription,
-	tweets: tweets
+  keywordSubscription: keywordSubscription,
+  tweets: tweets
 })

@@ -1,49 +1,45 @@
-import React from 'react';
-import axios from 'axios';
-import Tweets from './Tweets.jsx';
-import Keywords from './Keywords.jsx';
-import * as actions from '../../js/actions/actions';
-import { connect } from 'react-redux';
+import React from 'react'
+import axios from 'axios'
+import Tweets from './Tweets.jsx'
+import Keywords from './Keywords.jsx'
+import * as actions from '../../js/actions/actions'
+import { connect } from 'react-redux'
 // import SentimentTracker from './SentimentTracker.jsx';
 // import d3 from 'd3';
 // import rd3 from 'react-d3-library';
 
 class Sentimentally extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
-    this.fetchTweetsHandler = this.fetchTweetsHandler.bind(this);
-    this.init = this.init.bind(this);
-    this.selectKeywordIdHandler = this.selectKeywordIdHandler.bind(this);
-    this.fetchLatest = this.fetchLatest.bind(this);
+    // this.fetchTweetsHandler = this.fetchTweetsHandler.bind(this);
+    this.init = this.init.bind(this)
+    this.selectKeywordIdHandler = this.selectKeywordIdHandler.bind(this)
+    this.fetchLatest = this.fetchLatest.bind(this)
   }
 
-  componentDidMount() {
-    // NOTE: call after redux store has been initiated
-    // this.init(this.props.profileId);
-    this.init(1);
-
+  componentDidMount () {
+    this.init(this.props.profileId)
   }
-
 
   // NOTE: corresponding action creator must return thunk function, not action obj
-  init(profileId) {
+  init (profileId) {
     axios.get(`/subscriptions/${this.props.profileId}`)
       .then((subscriptions) => {
         let keywordIds = subscriptions.data.map(keyword => {
-          return keyword.keyword_id;
-        });
+          return keyword.keyword_id
+        })
         let keywords = subscriptions.data.map(keyword => {
-          return keyword.keyword;
-        });
-        let selectedKeywordId = keywordIds[0];
+          return keyword.keyword
+        })
+        let selectedKeywordId = keywordIds[0]
 
         this.props.dispatch(actions.initializeKeywords(keywordIds, keywords, selectedKeywordId))
-          .then(() => this.fetchTweetsHandler(selectedKeywordId));
+        this.props.dispatch(actions.fetchTweets(selectedKeywordId))
       })
       .catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
 
   /*
@@ -52,19 +48,22 @@ class Sentimentally extends React.Component {
           keywords: keywords,
           selectedKeywordId: keywordIds[0]
         }, () => this.fetchTweetsHandler(this.state.selectedKeywordId));
+
+  // redux attempt
+        .then(() => this.fetchTweetsHandler(selectedKeywordId));
   */
 
-  fetchTweetsHandler(keywordId) {
-    axios.get(`/tweets/${keywordId}`)
-      .then((tweetsArray) => {
-        let tweetData = tweetsArray.data;
+  // fetchTweetsHandler(keywordId) {
+  //   axios.get(`/tweets/${keywordId}`)
+  //     .then((tweetsArray) => {
+  //       let tweetData = tweetsArray.data;
 
-        this.props.dispatch(actions.showTweetsForKeywordId(tweetData));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  //       this.props.dispatch(actions.showTweetsForKeywordId(tweetData));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
 
   /*
         this.setState({
@@ -72,66 +71,62 @@ class Sentimentally extends React.Component {
         });
   */
 
-/*
-STEPS FOR REFACTORING this.setState({}) => Redux
-  1) remove this.setState fn
-  2) replace with this.props.dispatch(data)
-  3) make/modify appropriate action creator function in actions.js
-  4) make appropriate corresponding switch case in reducer function
-
-*/
+  /*
+  STEPS FOR REFACTORING this.setState({}) => Redux
+    1) remove this.setState fn
+    2) replace with this.props.dispatch(data)
+    3) make/modify appropriate action creator function in actions.js
+    4) make appropriate corresponding switch case in reducer function
+  */
 
   // NOTE: corresponding action creator must return thunk function, not action obj
-  selectKeywordIdHandler(event) {
-    let keyword = event.target.value;
+  selectKeywordIdHandler (event) {
+    let keyword = event.target.value
     axios.get(`/keywordId/${keyword}`)
       .then((keywordId) => {
         this.props.dispatch(actions.changeSelectedKeywordId(keywordId))
-          .then(() => this.fetchTweetsHandler(selectedKeywordId));
+        // .then(() => this.fetchTweetsHandler(selectedKeywordId));
       })
       .catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
 
-        // this.setState({
-        //   selectedKeywordId: keywordId.data[0].id
-        // }, () => this.fetchTweetsHandler(this.state.selectedKeywordId));
+  // this.setState({
+  //   selectedKeywordId: keywordId.data[0].id
+  // }, () => this.fetchTweetsHandler(this.state.selectedKeywordId));
 
-
-  fetchLatest(keywordIdResponse) {
-    axios.get(`/subscriptions/${profileId}`)
+  fetchLatest (keywordIdResponse) {
+    axios.get(`/subscriptions/${this.props.profileId}`)
       .then((subscriptions) => {
         let keywordIds = subscriptions.data.map(keyword => {
-          return keyword.keyword_id;
-        });
+          return keyword.keyword_id
+        })
         let keywords = subscriptions.data.map(keyword => {
-          return keyword.keyword;
-        });
+          return keyword.keyword
+        })
 
-        this.props.dispatch(actions.subscribeToKeyword(keywordIds, keywords));
-
+        this.props.dispatch(actions.subscribeToKeyword(keywordIds, keywords))
       })
       .catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
 
   /*
-        this.setState({
-          keywordIds: keywordIds,
-          keywords: keywords
-        });
+  this.setState({
+    keywordIds: keywordIds,
+    keywords: keywords
+  });
   */
 
-  render() {
+  render () {
     return (
       <div>
         <Keywords fetchLatest={this.fetchLatest} profileId={this.props.profileId} selectKeyword={this.selectKeywordIdHandler} keywordsArray={this.props.keywords} />
-        
         <Tweets tweetsArray={this.props.tweets} />
       </div>
-    );
+    )
   }
 }
 
@@ -143,4 +138,4 @@ export default connect((state, props) => {
     selectedKeywordId: state.tweets.selectedKeywordId,
     keywords: state.tweets.keywords
   }
-})(Sentimentally);
+})(Sentimentally)

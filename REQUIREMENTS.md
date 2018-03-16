@@ -1,7 +1,7 @@
 # Front End Thesis Requirements
 
 ## Business Question
-_As a Twitter Advertiser I want to know what the ratio of positive to negative tweets about my brand over the last 3 month by 5 min increments_
+_As a Twitter Advertiser I want to know what the ratio of positive to negative tweets about my brand was over the last 3 months, by 5-minute increments_
 
 *Server Side Requirements*
 

@@ -1,13 +1,13 @@
-const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
-const redisClient = require('redis').createClient();
+const session = require('express-session')
+const RedisStore = require('connect-redis')(session)
+const redisClient = require('redis').createClient()
 
 module.exports.verify = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return next();
+    return next()
   }
-  res.redirect('/login');
-};
+  res.redirect('/login')
+}
 
 module.exports.session = session({
   store: new RedisStore({
@@ -18,4 +18,4 @@ module.exports.session = session({
   secret: 'more laughter, more love, more life',
   resave: false,
   saveUninitialized: false
-});
+})

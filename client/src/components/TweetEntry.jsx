@@ -1,20 +1,19 @@
-import React from 'react';
+import React from 'react'
 
 class TweetEntry extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+  constructor (props) {
+    super(props)
+    this.state = {}
   }
 
-  render() {
-    console.log('tweetEntry chek', this.props.tweetEntry);
+  render () {
     return (
       <article className="tweetEntry">
         <span><b>{this.props.tweetEntry.sentiment}:</b>&nbsp;</span>
         <span>{this.props.tweetEntry.text}</span>
       </article>
-    );
+    )
   }
 }
 
-export default TweetEntry;
+export default TweetEntry

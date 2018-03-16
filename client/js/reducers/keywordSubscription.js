@@ -1,4 +1,4 @@
-import { ActionTypes as types } from '../helpers/constants';
+import { ActionTypes as types } from '../helpers/constants'
 
 const defaultState = {
   profileId: 1,
@@ -13,8 +13,8 @@ const keywordSubscription = (state = defaultState, action) => {
         keywordInput: action.data.keywordInput
       }
     default:
-      return state;
+      return state
   }
 }
 
-export default keywordSubscription;
+export default keywordSubscription

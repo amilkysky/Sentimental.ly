@@ -1,20 +1,18 @@
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
 // import rd3 from 'react-d3-library';
 
 class Graph extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+  constructor (props) {
+    super(props)
+    this.state = {}
   }
 
-  render() {
+  render () {
     return (
       <div className="graphContainer">
       </div>
-    );
+    )
   }
-  
 }
 
-export default Graph;
+export default Graph
