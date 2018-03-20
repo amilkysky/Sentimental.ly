@@ -123,6 +123,7 @@ class Sentimentally extends React.Component {
   render () {
     return (
       <div>
+        <h1>Sentimental.ly</h1>
         <Keywords fetchLatest={this.fetchLatest} profileId={this.props.profileId} selectKeyword={this.selectKeywordIdHandler} keywordsArray={this.props.keywords} />
         <Tweets tweetsArray={this.props.tweets} />
       </div>
