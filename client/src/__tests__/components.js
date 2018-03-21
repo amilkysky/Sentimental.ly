@@ -6,7 +6,7 @@ import TweetEntry from '../components/TweetEntry.jsx'
 
 Enzyme.configure({ adapter: new Adapter() })
  
-function setup() {
+function setupTweetEntry() {
   const props = {
     tweetEntry: {
       sentiment: '10',
@@ -26,7 +26,7 @@ describe('components', () => {
 
   describe('TweetEntry', () => {
     it('should render self and subcomponents', () => {
-      const { enzymeWrapper } = setup()
+      const { enzymeWrapper } = setupTweetEntry()
  
       expect(enzymeWrapper.find('article').hasClass('tweetEntry')).toBe(true)
       expect(enzymeWrapper.find('.tweetEntryText').text()).toBe('chocolate')
