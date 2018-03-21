@@ -38,6 +38,7 @@ app.get('/subscriptions/:profile_id', async (req, res) => {
 
 // gets historical tweets filtered on keyword
 app.get('/tweets/:keyword_id', async (req, res) => {
+
   // query db for tweets by keywordId
   // dbModule.knex.raw(SELECT * FROM tweets WHERE keyword = req.params.keyword)
   const tweets = await knexHelpers.getTweetsByKeyword(req.params.keyword_id)

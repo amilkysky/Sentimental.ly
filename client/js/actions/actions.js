@@ -59,6 +59,8 @@ const getTweetsAjaxCall = (keywordId, dispatch) => {
     .then((tweetsArray) => {
       let tweetData = tweetsArray.data
 
+      // console.log(tweetData)
+
       dispatch({
         type: types.SHOW_TWEETS_FOR_KEYWORD_ID,
         data: {tweets: tweetData}
