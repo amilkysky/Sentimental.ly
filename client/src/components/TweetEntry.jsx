@@ -9,8 +9,8 @@ class TweetEntry extends React.Component {
   render () {
     return (
       <article className="tweetEntry">
-        <span><b>{this.props.tweetEntry.sentiment}:</b>&nbsp;</span>
-        <span>{this.props.tweetEntry.text}</span>
+        <b><span className="tweetEntrySentiment">{this.props.tweetEntry.sentiment}: </span></b>
+        <span className="tweetEntryText">{this.props.tweetEntry.text}</span>
       </article>
     )
   }
