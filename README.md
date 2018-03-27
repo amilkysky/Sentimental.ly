@@ -8,19 +8,19 @@ Daphne Dang
 
 ## Technologies:
 
-Node.js
-Express
-PostgreSQL
-Redis
-React
-Redux
-Redux-Thunk
-D3
-Jest
-Enzyme
-Mocha
-Chai
-Chai-HTTP
+- Node.js
+- Express
+- PostgreSQL
+- Redis
+- React
+- Redux
+- Redux-Thunk
+- D3
+- Jest
+- Enzyme
+- Mocha
+- Chai
+- Chai-HTTP
 
 # Deployed Application
 
