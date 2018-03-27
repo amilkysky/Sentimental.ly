@@ -29,17 +29,15 @@ export const initializeKeywords = (keywordIds, keywords, selectedKeywordId) => {
   }
 }
 
-// export const showTweetsForKeywordId = (tweetData) => {
-//   return {
-//     type: types.SHOW_TWEETS_FOR_KEYWORD_ID,
-//     data: {tweets: tweetData}
-//   }
-// }
+export const refreshedTweets = (selectedKeywordId) => {
+  return (dispatch) => {
+    getTweetsAjaxCall(selectedKeywordId, dispatch)
+  }
+}
 
 export const changeSelectedKeywordId = (selectedKeywordId) => {
-  return {
-    type: types.CHANGE_SELECTED_KEYWORD_ID,
-    data: {selectedKeywordId: selectedKeywordId}
+  return (dispatch) => {
+    getTweetsAjaxCall(selectedKeywordId.data[0].id, dispatch)
   }
 }
 
@@ -59,14 +57,31 @@ const getTweetsAjaxCall = (keywordId, dispatch) => {
     .then((tweetsArray) => {
       let tweetData = tweetsArray.data
 
-      // console.log(tweetData)
-
       dispatch({
         type: types.SHOW_TWEETS_FOR_KEYWORD_ID,
         data: {tweets: tweetData}
       })
+      makeGraph(tweetData, dispatch)
     })
     .catch((error) => {
       console.log(error)
     })
+}
+
+const makeGraph = (tweetData, dispatch) => {
+  let tweetSentiments = tweetData.map((tweet, i) => {
+    return {date: i, close: tweet.sentiment}
+  })
+
+  dispatch({
+    type: types.UPDATE_SENTIMENTS,
+    data: {sentiments: tweetSentiments}
+  })
+}
+
+export const updateTweetSentiments = (sentiments) => {
+  return {
+    type: types.UPDATE_SENTIMENTS,
+    data: {sentiments: sentiments}
+  }
 }
