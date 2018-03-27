@@ -3,10 +3,10 @@ require('dotenv').config()
 const { app } = require('./app')
 const db = require('../db')
 const twitter = require('./api/twitter')
-const PORT = process.env.port || 3000
+const http = require('http')
 
-const server = app.listen(PORT, () => {
-  console.log('Server is listening on port 3000!')
-})
+const server = http.createServer(app)
+server.listen(process.env.PORT)
+server.on('Listening', () => {console.log(`Server listening on port ${PORT}`)})
 
 module.exports.server = server

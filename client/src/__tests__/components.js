@@ -6,7 +6,7 @@ import TweetEntry from '../components/TweetEntry.jsx'
 
 Enzyme.configure({ adapter: new Adapter() })
  
-function setupTweetEntry() {
+function setupTweetEntry () {
   const props = {
     tweetEntry: {
       sentiment: '10',

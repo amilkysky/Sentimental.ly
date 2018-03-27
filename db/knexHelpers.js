@@ -21,7 +21,7 @@ const getSubscriptionsByUserId = (userId) => {
 const getTweetsByKeyword = (keywordId) => {
   return knex('tweets').innerJoin('sentiments', 'sentiments.tweet_id', '=', 'tweets.id').innerJoin('keywords', 'sentiments.keyword_id', '=', 'keywords.id').where({
     'keyword_id': keywordId
-  }).select('tweets.*', 'sentiments.sentiment').orderBy('keywords.id', 'desc').limit(25)
+  }).select('tweets.*', 'sentiments.sentiment').orderBy('sentiments.tweet_id', 'desc').limit(25)
 }
 // example of how to modularize the twitter.js function (longterm goals)
 // const insertTweets = (tweetEvent) => {

@@ -24,7 +24,5 @@ exports.rollback = (done) => {
     })
     .catch(function (err) {
       throw err
-      // console.log('err in migration afterEach')
-      // done()
     })
 }
