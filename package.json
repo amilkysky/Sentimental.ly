@@ -9,7 +9,8 @@
     "test-react": "jest /client/src/__tests__/",
     "build": "webpack --watch",
     "makeTables": "node db/schema.js",
-    "build2": "webpack -w --mode development"
+    "build2": "webpack -w --mode development",
+    "post-install": "redis-server"
   },
   "author": "Hack Reactor",
   "license": "MIT",
