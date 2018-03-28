@@ -10,7 +10,7 @@
     "build": "webpack --watch",
     "makeTables": "node db/schema.js",
     "build2": "webpack -w --mode development",
-    "post-install": "redis-server"
+    "post-install": "redis-server & webpack -p"
   },
   "author": "Hack Reactor",
   "license": "MIT",
