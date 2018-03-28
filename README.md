@@ -24,7 +24,7 @@ Daphne Dang
 
 # Deployed Application
 
-Visit www.herokuapp.com/
+Visit https://sentimental-ly.herokuapp.com/
 
 # Local Installation
 
