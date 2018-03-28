@@ -1,17 +1,18 @@
-let knex = null
+// const knex = require('knex')({
+//   client: 'pg',
+//   connection: 'postgres://otukpesfzjzjeg:c687f73bbb44519ecf3248c6c48f0efa6d0f537c4662e2c3616458b4be015366@ec2-23-21-121-220.compute-1.amazonaws.com:5432/d33vmddqmrcp61',
+//   searchPath: ['knex', 'public']
+// })
 
-if (!process.env.database) {
-  knex = require('knex')(require('../knexfile'))
-} else {
-  knex = require('knex') // (must fix) initialize using heroku env variables
-}
+// const db = require('bookshelf')(knex)
 
-const db = require('bookshelf')(knex)
+// db.plugin('registry')
 
-db.plugin('registry')
+// module.exports.db = db
+// module.exports.knex = knex
 
-module.exports.db = db
-module.exports.knex = knex
+const db = require('./').db
+const knex = require('./').knex
 
 console.log('Running schema.js to create tables!')
 

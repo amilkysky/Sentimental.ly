@@ -8,6 +8,7 @@ experimentation/
 
 # Keys etc
 .env
+schema.js
 
 # OS X
 .DS_Store

@@ -1,14 +1,14 @@
-let knex = null
-
-if (!process.env.database) {
-  knex = require('knex')(require('../knexfile'))
-} else {
-  knex = require('knex') // (must fix) initialize using heroku env variables
-}
+const knex = require('knex')({
+  client: 'pg',
+  connection: process.env.DATABASE_URL,
+  searchPath: ['knex', 'public']
+})
 
 const db = require('bookshelf')(knex)
 
 db.plugin('registry')
+
+const schema = require('./schema.js')
 
 module.exports.db = db
 module.exports.knex = knex
