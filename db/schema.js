@@ -11,8 +11,9 @@
 // module.exports.db = db
 // module.exports.knex = knex
 
-const db = require('./').db
-const knex = require('./').knex
+const database = require('./index.js')
+const db = database.db
+const knex = db.knex
 
 console.log('Running schema.js to create tables!')
 

@@ -8,7 +8,8 @@ const db = require('bookshelf')(knex)
 
 db.plugin('registry')
 
-const schema = require('./schema.js')
 
 module.exports.db = db
 module.exports.knex = knex
+
+const schema = require('./schema.js')
