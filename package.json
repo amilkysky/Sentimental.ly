@@ -49,7 +49,6 @@
     "https": "^1.0.0",
     "knex": "^0.12.9",
     "morgan": "^1.8.1",
-    "muicss": "^0.9.36",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
