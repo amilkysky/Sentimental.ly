@@ -2,7 +2,8 @@
   "name": "course.thesis",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon server",
+    "start": "node server",
+    "dev-server": "nodemon server",
     "test": "mocha test",
     "test2": "grunt test",
     "test-react": "jest /client/src/__tests__/",
