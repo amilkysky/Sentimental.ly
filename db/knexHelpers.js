@@ -6,12 +6,6 @@ const getKeywordIdByKeyword = (keyword) => {
   }).select('id')
 }
 
-// const getSubscriptionsByUserId = (userId) => {
-//   return knex('subscriptions').where({
-//     'profile_id': userId
-//   }).select('*')
-// }
-
 const getSubscriptionsByUserId = (userId) => {
   return knex('subscriptions').innerJoin('keywords', 'subscriptions.keyword_id', 'keywords.id').where({
     'profile_id': userId
@@ -23,19 +17,6 @@ const getTweetsByKeyword = (keywordId) => {
     'keyword_id': keywordId
   }).select('tweets.*', 'sentiments.sentiment').orderBy('sentiments.tweet_id', 'desc').limit(25)
 }
-// example of how to modularize the twitter.js function (longterm goals)
-// const insertTweets = (tweetEvent) => {
-//   dbModule.knex('tweets').insert({
-//     tweeted_at: tweetEvent.created_at,
-//     url: tweetEvent.entities.urls[0].url,
-//     text: tweetEvent.text,
-//     retweet_count: tweetEvent.retweeted_status.retweet_count,
-//     user_name: tweetEvent.user.name,
-//     profile_image_url: tweetEvent.user.profile_image_url,
-//     screenname: tweetEvent.user.screen_name
-//   })
-//   .returning('id')
-// }
 
 const getSentimentsByKeyword = (keywordId) => {
   return knex('sentiments').where({
