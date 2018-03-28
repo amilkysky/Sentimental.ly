@@ -4,6 +4,8 @@ const express = require('express')
 const path = require('path')
 const middleware = require('./middleware')
 
+// const csp = require('helmet-csp')
+
 const app = express()
 module.exports.app = app
 
@@ -26,3 +28,10 @@ const routes = require('./routes')
 app.use('/', routes.auth)
 app.use('/api', routes.api)
 app.use('/api/profiles', routes.profiles)
+
+// app.use(csp({
+//   directives: {
+//     defaultSrc: [`'self'`],
+//     imgSrc: [`'self'`, `'data:'`]
+//   }
+// }))
