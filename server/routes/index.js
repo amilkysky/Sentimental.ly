@@ -1,16 +1,24 @@
 module.exports.api = require('./api')
 module.exports.auth = require('./auth')
 module.exports.profiles = require('./profiles')
+const { makeDatetimeString } = require('../../db/timestampHelper.js')
 
 const twitter = require('../api/twitter')
 const { app } = require('../app')
 
 const knexHelpers = require('../../db/knexHelpers')
 
-app.post('/subscribe', (req, res) => {
-  const keyword = req.body.keyword
-  const profileId = req.body.profileId
-  twitter.createSubscription(keyword, profileId, res)
+app.post('/subscribe', async (req, res) => {
+  try {
+    const keyword = req.body.keyword
+    const profileId = req.body.profileId
+    const keywordIdResponse = await twitter.createSubscription(keyword, profileId)
+    res.send(keywordIdResponse)
+  } catch (error) {
+    console.log('Could not save data')
+    console.log(error)
+    res.sendStatus(400)
+  }
 })
 
 // get keywordId by keyword
@@ -66,4 +74,57 @@ app.get('/sentiments/:keyword_id', async (req, res) => {
   const sentiments = await knexHelpers.getSentimentsByKeyword(req.params.keyword_id)
 
   res.send(sentiments)
+})
+
+app.get('/initializeD3', async (req, res) => {
+  let sentiGraphScores = []
+
+  let timeStampObj = makeDatetimeString()
+  const mostRecentScore = await knexHelpers.getLatestSentimentsByKeyword(keyword, timeStampObj)
+  let date = -5
+
+  sentiGraphScores.push({date: date, close: mostRecentScore})
+
+  for (let i = 0; i < 11; i++) {
+    const pastScore = await knexHelpers.getSentimentsByKeywordWithinTimePeriod(keyword, timeStampObj)
+    let totalTweets = pastScore.length
+    let averageScore = null
+
+    if (totalTweets === 0) {
+      averageScore = 0
+    } else {
+      const summedScore = pastScore.reduce((total, amount) => total + amount, 0)
+      averageScore = summedScore / totalTweets
+    }
+
+    date -= 5
+    sentiGraphScores.push({date: date, close: pastScore})
+    timeStamp5MinAgo = makeDatetimeString(timeStamp5MinAgo)
+  }
+  res.send(sentiGraphScores)
+})
+
+app.get('/updateSentiGraphScores/:update/:selectedKeywordId', async (req, res) => {
+  console.log('req params chek', req.params.update)
+  let scores = req.params.update
+  scores.splice(scores.length - 1, 1)
+
+  newScores = scores.map(score => {
+    return {date: score.date - 5, close: score.close}
+  })
+
+  const mostRecentSentimentScores = await knexHelpers.getLatestSentimentsByKeyword(req.params.selectedKeywordId, makeDatetimeString())
+  let totalTweets = mostRecentSentimentScores.length
+  let averageScore = null
+
+  if (totalTweets === 0) {
+    averageScore = 0
+  } else {
+    const summedScore = mostRecentSentimentScores.reduce((total, amount) => total + amount, 0)
+    averageScore = summedScore / totalTweets
+  }
+
+  newScores.unshift({date: -5, close: averageScore})
+
+  res.send(newScores)
 })

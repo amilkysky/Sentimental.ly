@@ -25,7 +25,7 @@ const T = new Twit({
   timeout_ms: 60 * 1000
 })
 
-const createSubscription = async (keyword, profileId, res) => {
+const createSubscription = async (keyword, profileId) => {
   try {
     const keywordInfoObj = await checkIfKeywordExists(keyword)
     const exists = keywordInfoObj.found
@@ -57,12 +57,9 @@ const createSubscription = async (keyword, profileId, res) => {
 
       initDisconnectReconnectTwitStream(stream)
     }, 2000)
-    res.status(201)
-    res.send(keywordIdResponse)
+    return keywordIdResponse
   } catch (error) {
-    console.log('Could not save data')
     console.log(error)
-    res.sendStatus(400)
   }
 }
 

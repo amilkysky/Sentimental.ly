@@ -24,9 +24,26 @@ const getSentimentsByKeyword = (keywordId) => {
   }).select('*').orderBy('id', 'desc').limit(25)
 }
 
+const getLatestSentimentsByKeyword = async (keywordId, timeStampObj) => {
+  return await knex('sentiments')
+    .where('keyword_id', keywordId)
+    .andWhere('tweeted_at', '>', timeStampObj.time5MinAgo)
+    .select('sentiment')
+}
+
+const getSentimentsByKeywordWithinTimePeriod = async (keywordId, timeStampObj) => {
+  return await knex('sentiments')
+    .where('keyword_id', keywordId)
+    .andWhere('tweeted_at', '>', timeStampObj.time5MinAgo)
+    .andWhere('tweeted_at', '<', timeStampObj.timeNow)
+    .select('sentiment')
+}
+
 module.exports = {
   getKeywordIdByKeyword,
   getSubscriptionsByUserId,
   getTweetsByKeyword,
-  getSentimentsByKeyword
+  getSentimentsByKeyword,
+  getLatestSentimentsByKeyword,
+  getSentimentsByKeywordWithinTimePeriod
 }

@@ -18,7 +18,13 @@ const getLastDayOfPreviousMonth = (month) => {
 }
 
 // 2017/08/02 10:59:00    TO_TIMESTAMP(datetime, 'YYYY/MM/DD HH24:MI:SS')
-const makeDatetimeString = (date = new Date()) => {
+const makeDatetimeString = (dateString) => {
+  let date
+  if (dateString) {
+    date = new Date(dateString)
+  } else {
+    date = new Date()
+  }
   let year = date.getYear()
   year += 1900
   let month = date.getMonth() + 1
@@ -35,7 +41,7 @@ const makeDatetimeString = (date = new Date()) => {
 
   let timeStamp = `${year}/${month}/${day} ${hour}:${minute}:${second}`
   
-  if (minute > 5) {
+  if (minute >= 5) {
     minute -= 5
     if (minute < 10) { minute = ('0' + minute) }
     const newTimeStamp = `${year}/${month}/${day} ${hour}:${minute}:${second}`
