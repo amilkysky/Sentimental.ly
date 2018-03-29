@@ -7,33 +7,12 @@ const middleware = require('./middleware')
 const app = express()
 module.exports.app = app
 
-const csp = require(`helmet-csp`)
-
-app.use(csp({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'"],
-    styleSrc: ['style.com', "'unsafe-inline'"],
-    fontSrc: ["'self'"],
-    imgSrc: ['self', 'data:'],
-    reportUri: '/report-violation',
-    objectSrc: ["'none'"],
-    workerSrc: false
-  },
-  loose: true,
-  reportOnly: true,
-  setAllHeaders: false,
-  disableAndroid: true,
-  browserSniff: true
-}))
-
 app.use(middleware.morgan('dev'))
 app.use(middleware.cookieParser())
 app.use(middleware.bodyParser.urlencoded({extended: false}))
 app.use(middleware.bodyParser.json())
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
-
 
 app.use(middleware.auth.session)
 app.use(middleware.passport.initialize())
