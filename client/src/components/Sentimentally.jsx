@@ -5,6 +5,7 @@ import Keywords from './Keywords.jsx'
 import * as actions from '../../js/actions/actions'
 import { connect } from 'react-redux'
 import D3Table from './D3.jsx'
+require('babel-polyfill')
 
 class Sentimentally extends React.Component {
   constructor (props) {
@@ -18,13 +19,9 @@ class Sentimentally extends React.Component {
   componentDidMount () {
     this.init(this.props.profileId)
 
-    setTimeout(() => {
-      this.makeGraph()
-    }, 2000)
-
     setInterval(() => {
-      this.props.dispatch(actions.refreshedTweets(this.props.selectedKeywordId))
-    }, 10000)
+      this.updateSentiGraphScores()
+    }, 5000)
   }
 
   init (profileId) {
@@ -40,25 +37,70 @@ class Sentimentally extends React.Component {
 
         this.props.dispatch(actions.initializeKeywords(keywordIds, keywords, selectedKeywordId))
         this.props.dispatch(actions.fetchTweets(selectedKeywordId))
+        this.initializeGraphSentiScores(selectedKeywordId)
       })
       .catch((error) => {
         console.log(error)
       })
   }
 
-  makeGraph () {
-    let tweetSentiments = this.props.tweets.map((tweet, i) => {
-      return {date: i, close: tweet.sentiment}
+  async initializeGraphSentiScores (keywordId) {
+    console.log('in REACT keywordId chek', keywordId)
+
+    const sentiGraphScores = await axios.get(`/initializeD3/${keywordId}`)
+    console.log('in REACT sentiGraphScores chek', sentiGraphScores)
+    this.props.dispatch(actions.updateTweetSentiments(sentiGraphScores.data))
+  }
+
+  async updateSentiGraphScores () {
+    const latestScoresResult = await axios.get(`/updateSentiGraphScores/${this.props.selectedKeywordId}`)
+
+    let latestScores
+
+    if (latestScoresResult.data.length === 0) {
+      latestScores = [{sentiment: 0}]
+    } else {
+      latestScores = latestScoresResult.data
+    }
+
+    console.log('in REACT latest chek', latestScores)
+
+    let scores = this.props.update
+    scores.splice(scores.length - 1, 1)
+
+    const newScores = scores.map(score => {
+      return {date: score.date - 5, close: score.close}
     })
 
-    this.props.dispatch(actions.updateTweetSentiments(tweetSentiments))
+    let totalTweets = latestScores.length
+    let averageScore = null
+
+    if (totalTweets === 0) {
+      averageScore = 0
+    } else {
+      const mappedLatestScores = latestScores.map(score => score.sentiment)
+      console.log('REACT mappedLatestScores chek', mappedLatestScores)
+      console.log('REACT totalTweets chek', totalTweets)
+
+      const summedScore = mappedLatestScores.reduce((total, amount) => total + amount, 0)
+      averageScore = Math.ceil(summedScore / totalTweets)
+      console.log('REACT averageScore chek', averageScore)
+    }
+
+    newScores.unshift({date: -5, close: averageScore})
+
+    this.props.dispatch(actions.updateTweetSentiments(newScores))
   }
 
   selectKeywordIdHandler (event) {
     let keyword = event.target.value
+    console.log('keyword', keyword)
     axios.get(`/keywordId/${keyword}`)
       .then((keywordId) => {
+        console.log('keywordId', keywordId)
         this.props.dispatch(actions.changeSelectedKeywordId(keywordId))
+        this.initializeGraphSentiScores(keywordId.data[0].id)
+
       })
       .catch((error) => {
         console.log(error)
@@ -97,6 +139,7 @@ class Sentimentally extends React.Component {
 export default connect((state, props) => {
   return {
     profileId: state.keywordSubscription.profileId,
+    update: state.d3.update,
     keywordIds: state.keywordSubscription.keywordIds,
     tweets: state.tweets.tweets,
     selectedKeywordId: state.tweets.selectedKeywordId,

@@ -7,6 +7,7 @@ import Line from './Line.jsx'
 class Chart extends React.Component {
   render () {
     if (this.props.update) {
+      console.log('Chart component TOP CHEK', this.props.update)
       return (
         <div>
           <div id="chart">
@@ -21,6 +22,7 @@ class Chart extends React.Component {
         </div>
       )
     } else {
+      console.log('Chart component BOTTOM CHEK', this.props.sentiments)
       return (
         <div>
           <div id="chart">

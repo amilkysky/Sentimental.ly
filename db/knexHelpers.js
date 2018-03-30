@@ -25,17 +25,18 @@ const getSentimentsByKeyword = (keywordId) => {
 }
 
 const getLatestSentimentsByKeyword = async (keywordId, timeStampObj) => {
-  return await knex('sentiments')
+  return await knex('sentiments').innerJoin('tweets', 'sentiments.tweet_id', '=', 'tweets.id')
     .where('keyword_id', keywordId)
-    .andWhere('tweeted_at', '>', timeStampObj.time5MinAgo)
+    .andWhere('tweets.created_at', '>', timeStampObj.time5MinAgo)
     .select('sentiment')
 }
 
 const getSentimentsByKeywordWithinTimePeriod = async (keywordId, timeStampObj) => {
-  return await knex('sentiments')
+  console.log('any message like here oR CHEK!!!', keywordId, timeStampObj)
+  return await knex('sentiments').innerJoin('tweets', 'sentiments.tweet_id', '=', 'tweets.id')
     .where('keyword_id', keywordId)
-    .andWhere('tweeted_at', '>', timeStampObj.time5MinAgo)
-    .andWhere('tweeted_at', '<', timeStampObj.timeNow)
+    .andWhere('tweets.created_at', '>', timeStampObj.time5MinAgo)
+    .andWhere('tweets.created_at', '<', timeStampObj.timeNow)
     .select('sentiment')
 }
 

@@ -23,6 +23,8 @@ app.post('/subscribe', async (req, res) => {
 
 // get keywordId by keyword
 app.get('/keywordId/:keyword', async (req, res) => {
+  console.log('keyword', req.params.keyword)
+
   const keywordId = await knexHelpers.getKeywordIdByKeyword(req.params.keyword)
   res.send(keywordId)
 })
@@ -76,55 +78,59 @@ app.get('/sentiments/:keyword_id', async (req, res) => {
   res.send(sentiments)
 })
 
-app.get('/initializeD3', async (req, res) => {
+app.get('/initializeD3/:keyword', async (req, res) => {
   let sentiGraphScores = []
 
   let timeStampObj = makeDatetimeString()
-  const mostRecentScore = await knexHelpers.getLatestSentimentsByKeyword(keyword, timeStampObj)
+  console.log('timeStampObj CHEK', timeStampObj)
+
+  const mostRecentScore = await knexHelpers.getLatestSentimentsByKeyword(req.params.keyword, timeStampObj)
+  console.log('mostRecentScore CHEK', mostRecentScore)
+
+  const filteredRecentScores = mostRecentScore.filter(score => score.sentiment !== 0)
+  console.log('filteredRecentScores CHEK', filteredRecentScores)
+
+  let totalRecentTweets = mostRecentScore.length
+  let averageRecentScore = null
+
+  if (totalRecentTweets === 0) {
+    averageRecentScore = 0
+  } else {
+    const mappedmostRecentScore = filteredRecentScores.map(score => score.sentiment)
+    const summedRecentScore = mappedmostRecentScore.reduce((total, amount) => total + amount, 0)
+    averageRecentScore = Math.ceil(summedRecentScore / totalRecentTweets)
+  }
+
   let date = -5
 
-  sentiGraphScores.push({date: date, close: mostRecentScore})
+  sentiGraphScores.push({date: date, close: averageRecentScore})
 
   for (let i = 0; i < 11; i++) {
-    const pastScore = await knexHelpers.getSentimentsByKeywordWithinTimePeriod(keyword, timeStampObj)
+    const pastScore = await knexHelpers.getSentimentsByKeywordWithinTimePeriod(req.params.keyword, timeStampObj)
+    console.log('pastScore CHEK', pastScore)
     let totalTweets = pastScore.length
     let averageScore = null
 
     if (totalTweets === 0) {
       averageScore = 0
     } else {
-      const summedScore = pastScore.reduce((total, amount) => total + amount, 0)
-      averageScore = summedScore / totalTweets
+      const mappedPastScore = pastScore.map(score => score.sentiment)
+      const summedScore = mappedPastScore.reduce((total, amount) => total + amount, 0)
+      averageScore = Math.ceil(summedScore / totalTweets)
     }
 
     date -= 5
-    sentiGraphScores.push({date: date, close: pastScore})
-    timeStamp5MinAgo = makeDatetimeString(timeStamp5MinAgo)
+    sentiGraphScores.push({date: date, close: averageScore})
+    timeStampObj = makeDatetimeString(timeStampObj.time5MinAgo)
   }
   res.send(sentiGraphScores)
 })
 
-app.get('/updateSentiGraphScores/:update/:selectedKeywordId', async (req, res) => {
-  console.log('req params chek', req.params.update)
-  let scores = req.params.update
-  scores.splice(scores.length - 1, 1)
-
-  newScores = scores.map(score => {
-    return {date: score.date - 5, close: score.close}
-  })
-
+app.get('/updateSentiGraphScores/:selectedKeywordId', async (req, res) => {
+  console.log('selectedKeywordId CHEK', req.params.selectedKeywordId)
   const mostRecentSentimentScores = await knexHelpers.getLatestSentimentsByKeyword(req.params.selectedKeywordId, makeDatetimeString())
-  let totalTweets = mostRecentSentimentScores.length
-  let averageScore = null
-
-  if (totalTweets === 0) {
-    averageScore = 0
-  } else {
-    const summedScore = mostRecentSentimentScores.reduce((total, amount) => total + amount, 0)
-    averageScore = summedScore / totalTweets
-  }
-
-  newScores.unshift({date: -5, close: averageScore})
-
-  res.send(newScores)
+  console.log('mostRecentSentimentScores CHEK', mostRecentSentimentScores)
+  const filteredSentimentScores = mostRecentSentimentScores.filter(score => score.sentiment !== 0)
+  console.log('filteredSentimentScores CHEK', filteredSentimentScores)
+  res.send(filteredSentimentScores)
 })
