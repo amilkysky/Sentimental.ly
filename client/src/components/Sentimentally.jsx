@@ -45,10 +45,7 @@ class Sentimentally extends React.Component {
   }
 
   async initializeGraphSentiScores (keywordId) {
-    console.log('in REACT keywordId chek', keywordId)
-
     const sentiGraphScores = await axios.get(`/initializeD3/${keywordId}`)
-    console.log('in REACT sentiGraphScores chek', sentiGraphScores)
     this.props.dispatch(actions.updateTweetSentiments(sentiGraphScores.data))
   }
 
@@ -63,9 +60,12 @@ class Sentimentally extends React.Component {
       latestScores = latestScoresResult.data
     }
 
-    console.log('in REACT latest chek', latestScores)
-
     let scores = this.props.update
+
+    if (scores === null) {
+      return
+    }
+
     scores.splice(scores.length - 1, 1)
 
     const newScores = scores.map(score => {
@@ -79,12 +79,8 @@ class Sentimentally extends React.Component {
       averageScore = 0
     } else {
       const mappedLatestScores = latestScores.map(score => score.sentiment)
-      console.log('REACT mappedLatestScores chek', mappedLatestScores)
-      console.log('REACT totalTweets chek', totalTweets)
-
       const summedScore = mappedLatestScores.reduce((total, amount) => total + amount, 0)
       averageScore = Math.ceil(summedScore / totalTweets)
-      console.log('REACT averageScore chek', averageScore)
     }
 
     newScores.unshift({date: -5, close: averageScore})
@@ -94,7 +90,6 @@ class Sentimentally extends React.Component {
 
   selectKeywordIdHandler (event) {
     let keyword = event.target.value
-    console.log('keyword', keyword)
     axios.get(`/keywordId/${keyword}`)
       .then((keywordId) => {
         console.log('keywordId', keywordId)

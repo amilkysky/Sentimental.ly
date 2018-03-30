@@ -6,7 +6,6 @@ ON subscriptions.keyword_id = keywords.id
 WHERE profile_id = 1;
 
 
-// may not need the following, if using the bottom one and using socket.io
 SELECT sentiments.sentiment, tweets.*
 FROM sentiments
 INNER JOIN tweets 
@@ -16,8 +15,6 @@ WHERE keyword_id = 1;
 SELECT sentiments.sentiment
 FROM sentiments
 WHERE keyword_id = 1;
-
-
 
 
 SELECT *

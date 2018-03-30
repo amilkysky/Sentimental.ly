@@ -56,9 +56,7 @@ const getTweetsAjaxCall = (keywordId, dispatch) => {
   axios.get(`/tweets/${keywordId}`)
     .then((tweetsArray) => {
       let tweetData = tweetsArray.data
-      console.log('tweetData actions cheK', tweetData)
       let filteredTweetData = tweetData.filter(tweetObj => tweetObj.sentiment !== 0)
-      console.log('filteredTweetData actions cheK', filteredTweetData)
 
       dispatch({
         type: types.SHOW_TWEETS_FOR_KEYWORD_ID,
