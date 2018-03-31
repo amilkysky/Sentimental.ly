@@ -86,7 +86,7 @@ class Sentimentally extends React.Component {
       averageScore = -5
     }
 
-    newScores.unshift({date: -5, close: averageScore})
+    newScores.unshift({date: -1, close: averageScore})
 
     this.props.dispatch(actions.updateTweetSentiments(newScores))
   }
