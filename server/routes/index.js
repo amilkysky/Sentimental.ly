@@ -61,6 +61,13 @@ app.get('/initializeD3/:keyword', async (req, res) => {
     averageRecentScore = Math.ceil(summedRecentScore / totalRecentTweets)
   }
 
+  if (averageRecentScore > 5) {
+    averageRecentScore = 5
+  }
+  if (averageRecentScore < -5) {
+    averageRecentScore = -5
+  }
+
   let date = -5
 
   sentiGraphScores.push({date: date, close: averageRecentScore})
@@ -78,9 +85,16 @@ app.get('/initializeD3/:keyword', async (req, res) => {
       averageScore = Math.ceil(summedScore / totalTweets)
     }
 
+    if (averageScore > 5) {
+      averageScore = 5
+    }
+    if (averageScore < -5) {
+      averageScore = -5
+    }
+
     date -= 5
     sentiGraphScores.push({date: date, close: averageScore})
-    timeStampObj = makeDatetimeString(timeStampObj.time5MinAgo)
+    timeStampObj = makeDatetimeString(timeStampObj.time1MinAgo)
   }
   res.send(sentiGraphScores)
 })

@@ -21,11 +21,11 @@ class Sentimentally extends React.Component {
 
     setInterval(() => {
       this.updateSentiGraphScores()
-    }, 5000)
+    }, 60000)
   }
 
   init (profileId) {
-    axios.get(`/subscriptions/${this.props.profileId}`)
+    axios.get(`/subscriptions/${profileId}`)
       .then((subscriptions) => {
         let keywordIds = subscriptions.data.map(keyword => {
           return keyword.keyword_id
@@ -61,15 +61,10 @@ class Sentimentally extends React.Component {
     }
 
     let scores = this.props.update
-
-    if (scores === null) {
-      return
-    }
-
     scores.splice(scores.length - 1, 1)
 
     const newScores = scores.map(score => {
-      return {date: score.date - 5, close: score.close}
+      return {date: score.date - 1, close: score.close}
     })
 
     let totalTweets = latestScores.length
@@ -79,8 +74,16 @@ class Sentimentally extends React.Component {
       averageScore = 0
     } else {
       const mappedLatestScores = latestScores.map(score => score.sentiment)
+
       const summedScore = mappedLatestScores.reduce((total, amount) => total + amount, 0)
       averageScore = Math.ceil(summedScore / totalTweets)
+    }
+
+    if (averageScore > 5) {
+      averageScore = 5
+    }
+    if (averageScore < -5) {
+      averageScore = -5
     }
 
     newScores.unshift({date: -5, close: averageScore})
@@ -92,7 +95,6 @@ class Sentimentally extends React.Component {
     let keyword = event.target.value
     axios.get(`/keywordId/${keyword}`)
       .then((keywordId) => {
-        console.log('keywordId', keywordId)
         this.props.dispatch(actions.changeSelectedKeywordId(keywordId))
         this.initializeGraphSentiScores(keywordId.data[0].id)
 
